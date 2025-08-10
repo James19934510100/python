@@ -23,10 +23,8 @@ import streamlit as st
 with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-
 st.title("通航小智")
 st.write("Welcome to our school!")
-st.image('pic01.jpg')
 
 # 定义大模型
 model = ChatTongyi(model_name='qwen-max', streaming=True)
