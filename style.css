@@ -1,0 +1,6 @@
+/* style.css */
+.stApp {
+    background-color: #97a9ce; /* 设置背景颜色 */
+    background-image: url('pic01.jpg'); /* 设置背景图片 */
+    background-size: cover; /* 背景图片覆盖整个页面 */
+}
