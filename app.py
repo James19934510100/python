@@ -20,13 +20,13 @@ from langchain.schema import HumanMessage, AIMessage
 # 设置背景
 import streamlit as st
  
-with open(r"C:\Users\49033\Desktop\AItest\style.css") as f:
+with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
 st.title("通航小智")
 st.write("Welcome to our school!")
-st.image(r'C:\Users\49033\Desktop\AItest\pic01.jpg')
+st.image('pic01.jpg')
 
 # 定义大模型
 model = ChatTongyi(model_name='qwen-max', streaming=True)
