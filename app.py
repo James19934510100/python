@@ -17,16 +17,10 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain.schema import HumanMessage, AIMessage
 
 
+
 # 设置背景
-import streamlit as st
- 
-with open(r"C:\Users\49033\Desktop\AItest\style.css") as f:
+with open(r"python\style.css", encoding='utf-8') as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-
-st.title("通航小智")
-st.write("Welcome to our school!")
-st.image(r'C:\Users\49033\Desktop\AItest\pic01.jpg')
 
 # 定义大模型
 model = ChatTongyi(model_name='qwen-max', streaming=True)
@@ -70,8 +64,19 @@ chain = {
 
 # 构建页面
 # 页面的左边展示聊天内容，右边展示聊天记录
-left, right = st.columns([0.99, 0.01])
-with left: 
+left, right = st.columns([0.3, 0.7])
+with right: 
+    st.title("通航小智")
+    st.write("Welcome to our school!")
+    css_style = """
+        <style>
+        .stApp {
+            background-color: lightblue;
+        }
+        </style>
+    """
+    st.markdown(css_style, unsafe_allow_html=True)
+
     # 聊天内容展示
     container = st.container()
     with container:
@@ -80,33 +85,67 @@ with left:
                 st.write(message['content'])
     # 接收用户的输入信息，存放在 session_state 中
     prompt = st.chat_input("您好，请问有什么可以帮助您的吗?")
+    question_list = [
+        '心情不好的时候怎么办？', '成绩不好的人会一事无成吗？', '父母经常拿自己和别人比较怎么办？',
+        '为什么我们都去上课了，但是别的同学成绩比我高？'
+    ]
+    answer_list = [
+        '''
+            首先不能长时间低沉，会不利于心理健康噢~如果觉得不开心的话，
+            就做点让自己能够开心的事，比如散步、睡觉、发呆或者和我聊聊天等等。
+        ''',
+        '''
+            成绩和能力不会直接挂钩，成绩不好可能是上帝在创造你的时候忘记了赋予
+            你这个天赋，但是它也许悄悄赋予了你别样的能力，只要你坚持正确的做事
+            一定会有收获的。
+        ''',
+        '''
+            尝试告诉父母，每个人都是独一无二的，每个人都有自己的来时路，
+            在人生的康庄大道上，也许别人只是走得快，走的慢的你也一样会
+            抵达属于自己的终点。你要相信你就是你自己，你有你的闪光点，
+            别人亦是，也许你的闪光点还没有被发现。
+        ''',
+        '''
+            成绩不代表一切，也许是别人在背后偷偷多刷了几道题，也许是他
+            在课堂上积极互动，学习是双向的，你如果觉得也很努力了，那可
+            以尝试着在课堂上多和老师互动，这样可以提高印象分。
+        '''
+    ]
+    result = -1
+    for i in range(len(question_list)):
+        if str(prompt) == question_list[i]:
+            result = i
+            break
+
     if prompt:
-        st.session_state.messages.append(Message(content=prompt, role="human").model_dump())
-        with container:
-            with st.chat_message("human"):
-                st.write(prompt)
-        # 获取大模型的返回并展示
-        with container:
-            response = st.write_stream(chain.stream({'input': prompt, 'messages': st.session_state.messages}))
-        st.session_state.messages.append(Message(content=response, role='ai').model_dump())
+        if result != -1:
+            try:
+                with container:
+                    with st.chat_message("human"):
+                        st.write(question_list[result])
+                with container:
+                    response = st.write(answer_list[result])
+                st.session_state.messages.append(Message(content=response, role='human').model_dump())
+            except:
+                pass
+        else:
+            st.session_state.messages.append(Message(content=prompt, role="human").model_dump())
+            with container:
+                with st.chat_message("human"):
+                    st.write(prompt)
+            # 获取大模型的返回并展示
+            with container:
+                response = st.write_stream(chain.stream({'input': prompt, 'messages': st.session_state.messages}))
+            st.session_state.messages.append(Message(content=response, role='ai').model_dump())
 
-# with right:
-#     # 聊天记录展示
-#     st.json(st.session_state.messages)
+
+with left:
+    pass
 
 
 
 
 
-# def chatBoot():
-#     st.title("通航小智")
-#     st.write("Welcome to our school!")
-
-#     # 用于展示聊天内容
-#     st.write("Chatboot content goes here")
-
-#     # 用于展示聊天内容
-#     st.write("Chatboot history goes here")
 
 
 
