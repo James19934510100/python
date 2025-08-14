@@ -19,7 +19,7 @@ from langchain.schema import HumanMessage, AIMessage
 
 
 # 设置背景
-with open(r"python\style.css", encoding='utf-8') as f:
+with open("python/style.css", encoding='utf-8') as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # 定义大模型
